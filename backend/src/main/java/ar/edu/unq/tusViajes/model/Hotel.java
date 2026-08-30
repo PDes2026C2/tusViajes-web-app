@@ -18,40 +18,31 @@ public class Hotel {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String destino;
-
-    @Column(length = 200)
-    private String direccion;
-
-    @Column(length = 500)
-    private String descripcion;
 
     @Column(name = "foto_url", length = 300)
     private String fotoUrl;
 
-    private Integer categoria;
+    @Column(nullable = false)
+    private String servicio;
 
-    public Hotel(String nombre, String destino, String direccion, String descripcion,
-                 String fotoUrl, Integer categoria) {
+    public Hotel(String nombre, String destino, 
+                 String fotoUrl, String servicio) {
         this.nombre = nombre;
         this.destino = destino;
-        this.direccion = direccion;
-        this.descripcion = descripcion;
         this.fotoUrl = fotoUrl;
-        this.categoria = categoria;
+        this.servicio = servicio;
     }
 
-    public void actualizarDatos(String nombre, String destino, String direccion,
-                                 String descripcion, String fotoUrl, Integer categoria) {
+    public void actualizarDatos(String nombre, String destino, 
+                                String fotoUrl, String servicio) {
         this.nombre = nombre;
         this.destino = destino;
-        this.direccion = direccion;
-        this.descripcion = descripcion;
         this.fotoUrl = fotoUrl;
-        this.categoria = categoria;
+        this.servicio = servicio;
     }
 }

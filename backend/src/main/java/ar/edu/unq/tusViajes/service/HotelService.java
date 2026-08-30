@@ -34,16 +34,14 @@ public class HotelService {
 
     @Transactional
     public HotelResponseDTO crear(HotelRequestDTO dto) {
-        Hotel hotel = new Hotel(dto.getNombre(), dto.getDestino(), dto.getDireccion(),
-                dto.getDescripcion(), dto.getFotoUrl(), dto.getCategoria());
+        Hotel hotel = new Hotel(dto.getNombre(), dto.getDestino(), dto.getFotoUrl(), dto.getServicio());
         return toResponseDTO(hotelRepository.save(hotel));
     }
 
     @Transactional
     public HotelResponseDTO actualizar(Long id, HotelRequestDTO dto) {
         Hotel hotel = buscarEntidadPorId(id);
-        hotel.actualizarDatos(dto.getNombre(), dto.getDestino(), dto.getDireccion(),
-                dto.getDescripcion(), dto.getFotoUrl(), dto.getCategoria());
+        hotel.actualizarDatos(dto.getNombre(), dto.getDestino(), dto.getFotoUrl(), dto.getServicio());
         return toResponseDTO(hotel);
     }
 
@@ -61,7 +59,6 @@ public class HotelService {
     }
 
     private HotelResponseDTO toResponseDTO(Hotel hotel) {
-        return new HotelResponseDTO(hotel.getId(), hotel.getNombre(), hotel.getDestino(),
-                hotel.getDireccion(), hotel.getDescripcion(), hotel.getFotoUrl(), hotel.getCategoria());
+        return new HotelResponseDTO(hotel.getId(), hotel.getNombre(), hotel.getDestino(), hotel.getFotoUrl(), hotel.getServicio());
     }
 }

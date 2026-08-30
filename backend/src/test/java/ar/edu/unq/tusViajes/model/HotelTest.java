@@ -8,45 +8,32 @@ class HotelTest {
  
     @Test
     void constructor_asignaTodosLosCampos() {
-        Hotel hotel = new Hotel("Hotel Central", "Bariloche", "Av. Bustillo 123",
-                "Frente al lago", "http://ejemplo.com/foto.jpg", 4);
+        Hotel hotel = new Hotel("Hotel Central", "Av. Bustillo 123, Bariloche",
+         "http://ejemplo.com/foto.jpg", "Desayuno");
  
         assertThat(hotel.getNombre()).isEqualTo("Hotel Central");
-        assertThat(hotel.getDestino()).isEqualTo("Bariloche");
-        assertThat(hotel.getDireccion()).isEqualTo("Av. Bustillo 123");
-        assertThat(hotel.getDescripcion()).isEqualTo("Frente al lago");
+        assertThat(hotel.getDestino()).isEqualTo("Av. Bustillo 123, Bariloche");
         assertThat(hotel.getFotoUrl()).isEqualTo("http://ejemplo.com/foto.jpg");
-        assertThat(hotel.getCategoria()).isEqualTo(4);
+        assertThat(hotel.getServicio()).isEqualTo("Desayuno");
     }
  
     @Test
     void constructor_noAsignaIdTodavia() {
-        // el id lo genera la base al persistir (@GeneratedValue), no el constructor java
-        Hotel hotel = new Hotel("Hotel Central", "Bariloche", null, null, null, null);
+        Hotel hotel = new Hotel("Hotel Central", "Bariloche", null, null);
  
         assertThat(hotel.getId()).isNull();
     }
  
     @Test
     void actualizarDatos_sobreescribeTodosLosCampos() {
-        Hotel hotel = new Hotel("Hotel Viejo", "Mendoza", "Calle 1", "desc vieja", "foto-vieja.jpg", 2);
+        Hotel hotel = new Hotel("Hotel Viejo", "Calle 1, Mendoza", "foto-vieja.jpg", "Todo incluido");
  
-        hotel.actualizarDatos("Hotel Nuevo", "Salta", "Calle 2", "desc nueva", "foto-nueva.jpg", 5);
+        hotel.actualizarDatos("Hotel Nuevo", "Calle 2, Salta", "foto-nueva.jpg", "Nada");
  
         assertThat(hotel.getNombre()).isEqualTo("Hotel Nuevo");
-        assertThat(hotel.getDestino()).isEqualTo("Salta");
-        assertThat(hotel.getDireccion()).isEqualTo("Calle 2");
-        assertThat(hotel.getDescripcion()).isEqualTo("desc nueva");
+        assertThat(hotel.getDestino()).isEqualTo("Calle 2, Salta");
         assertThat(hotel.getFotoUrl()).isEqualTo("foto-nueva.jpg");
-        assertThat(hotel.getCategoria()).isEqualTo(5);
+        assertThat(hotel.getServicio()).isEqualTo("Nada");
     }
  
-    @Test
-    void actualizarDatos_permiteDejarLaCategoriaEnNulo() {
-        Hotel hotel = new Hotel("Hotel", "Cordoba", null, null, null, 3);
- 
-        hotel.actualizarDatos("Hotel", "Cordoba", null, null, null, null);
- 
-        assertThat(hotel.getCategoria()).isNull();
-    }
 }

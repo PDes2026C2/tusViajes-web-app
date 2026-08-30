@@ -9,8 +9,6 @@ public class HotelResponseDTO {
     private Long id;
     private String nombre;
     private String destino;
-    private String direccion;
-    private String descripcion;
     private String fotoUrl;
-    private Integer categoria;
+    private String servicio;
 }

@@ -34,8 +34,7 @@ class HotelServiceTest {
 
     @Test
     void buscarPorId_devuelveElHotel_cuandoExiste() {
-        Hotel hotel = new Hotel("Hotel Central", "Bariloche", "Av. Bustillo 123",
-                "Frente al lago", "http://ejemplo.com/foto.jpg", 4);
+        Hotel hotel = new Hotel("Hotel Central", "Bariloche", "http://ejemplo.com/foto.jpg", "Desayuno");
         when(hotelRepository.findById(1L)).thenReturn(Optional.of(hotel));
 
         HotelResponseDTO resultado = hotelService.buscarPorId(1L);
@@ -57,7 +56,6 @@ class HotelServiceTest {
         HotelRequestDTO dto = new HotelRequestDTO();
         dto.setNombre("Hotel Nuevo");
         dto.setDestino("Mendoza");
-        dto.setCategoria(3);
 
         when(hotelRepository.save(any(Hotel.class)))
                 .thenAnswer(invocacion -> invocacion.getArgument(0));
