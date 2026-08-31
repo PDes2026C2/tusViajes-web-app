@@ -33,7 +33,7 @@ class HotelServiceTest {
     }
 
     @Test
-    void buscarPorId_devuelveElHotel_cuandoExiste() {
+    void buscarPorIdDevuelveElHotelCuandoExiste() {
         Hotel hotel = new Hotel("Hotel Central", "Bariloche", "http://ejemplo.com/foto.jpg", "Desayuno");
         when(hotelRepository.findById(1L)).thenReturn(Optional.of(hotel));
 
@@ -44,7 +44,7 @@ class HotelServiceTest {
     }
 
     @Test
-    void buscarPorId_lanzaExcepcion_cuandoNoExiste() {
+    void buscarPorIdLanzaExcepcionCuandoNoExiste() {
         when(hotelRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> hotelService.buscarPorId(99L))
@@ -52,7 +52,7 @@ class HotelServiceTest {
     }
 
     @Test
-    void crear_guardaYDevuelveElHotelCreado() {
+    void crearGuardaYDevuelveElHotelCreado() {
         HotelRequestDTO dto = new HotelRequestDTO();
         dto.setNombre("Hotel Nuevo");
         dto.setDestino("Mendoza");
