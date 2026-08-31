@@ -53,12 +53,12 @@ public class HotelService {
         hotelRepository.deleteById(id);
     }
 
-    private Hotel buscarEntidadPorId(Long id) {
+    public Hotel buscarEntidadPorId(Long id) {
         return hotelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel " + id + " no encontrado"));
     }
 
-    private HotelResponseDTO toResponseDTO(Hotel hotel) {
+    public HotelResponseDTO toResponseDTO(Hotel hotel) {
         return new HotelResponseDTO(hotel.getId(), hotel.getNombre(), hotel.getDestino(), hotel.getFotoUrl(), hotel.getServicio());
     }
 }
