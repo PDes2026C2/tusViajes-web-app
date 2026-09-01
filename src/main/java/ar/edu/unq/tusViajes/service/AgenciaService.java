@@ -12,12 +12,14 @@ import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.Agencia;
 import ar.edu.unq.tusViajes.repository.AgenciaRepository;
+import ar.edu.unq.tusViajes.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AgenciaService {
-  private final AgenciaRepository agenciaRepository;
+    private final EntityValidator entityValidator;
+    private final AgenciaRepository agenciaRepository;
  
     @Transactional(readOnly = true)
     public List<AgenciaResponseDTO> listar() {
@@ -33,17 +35,17 @@ public class AgenciaService {
  
     @Transactional
     public AgenciaResponseDTO crear(AgenciaRequestDTO dto) {
-        if (agenciaRepository.existsByCuit(dto.getCuit())) {
-            throw new DuplicateResourceException("Ya existe una agencia con el CUIT " + dto.getCuit());
+        if (agenciaRepository.existsByCuit(dto.cuit())) {
+            throw new DuplicateResourceException("Ya existe una agencia con el CUIT " + dto.cuit());
         }
-        Agencia agencia = new Agencia(dto.getRazonSocial(), dto.getCuit());
+        Agencia agencia = new Agencia(dto.razonSocial(), dto.cuit());
         return toResponseDTO(agenciaRepository.save(agencia));
     }
  
     @Transactional
     public AgenciaResponseDTO actualizar(Long id, AgenciaRequestDTO dto) {
         Agencia agencia = buscarEntidadPorId(id);
-        agencia.actualizarRazonSocial(dto.getRazonSocial());
+        agencia.actualizarRazonSocial(dto.razonSocial());
         return toResponseDTO(agencia);
     }
  
@@ -56,8 +58,7 @@ public class AgenciaService {
     }
  
     public Agencia buscarEntidadPorId(Long id) {
-        return agenciaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Agencia " + id + " no encontrada"));
+        return entityValidator.findByIdOrThrow(agenciaRepository,id,"Agencia");
     }
  
     public AgenciaResponseDTO toResponseDTO(Agencia agencia) {

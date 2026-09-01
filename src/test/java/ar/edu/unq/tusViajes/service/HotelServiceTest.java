@@ -18,18 +18,20 @@ import ar.edu.unq.tusViajes.controller.dto.HotelResponseDTO;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.Hotel;
 import ar.edu.unq.tusViajes.repository.HotelRepository;
+import ar.edu.unq.tusViajes.validator.EntityValidator;
 
 @ExtendWith(MockitoExtension.class)
 class HotelServiceTest {
 
     @Mock
     private HotelRepository hotelRepository;
+    private EntityValidator entityValidator;
 
     private HotelService hotelService;
 
     @BeforeEach
     void setUp() {
-        hotelService = new HotelService(hotelRepository);
+        hotelService = new HotelService(entityValidator, hotelRepository);
     }
 
     @Test
@@ -39,8 +41,8 @@ class HotelServiceTest {
 
         HotelResponseDTO resultado = hotelService.buscarPorId(1L);
 
-        assertThat(resultado.getNombre()).isEqualTo("Hotel Central");
-        assertThat(resultado.getDestino()).isEqualTo("Bariloche");
+        assertThat(resultado.nombre()).isEqualTo("Hotel Central");
+        assertThat(resultado.destino()).isEqualTo("Bariloche");
     }
 
     @Test
@@ -53,16 +55,14 @@ class HotelServiceTest {
 
     @Test
     void crearGuardaYDevuelveElHotelCreado() {
-        HotelRequestDTO dto = new HotelRequestDTO();
-        dto.setNombre("Hotel Nuevo");
-        dto.setDestino("Mendoza");
+        HotelRequestDTO dto = new HotelRequestDTO("Hotel Nuevo", "Mendoza", null, null);
 
         when(hotelRepository.save(any(Hotel.class)))
                 .thenAnswer(invocacion -> invocacion.getArgument(0));
 
         HotelResponseDTO resultado = hotelService.crear(dto);
 
-        assertThat(resultado.getNombre()).isEqualTo("Hotel Nuevo");
-        assertThat(resultado.getDestino()).isEqualTo("Mendoza");
+        assertThat(resultado.nombre()).isEqualTo("Hotel Nuevo");
+        assertThat(resultado.destino()).isEqualTo("Mendoza");
     }
 }

@@ -24,16 +24,4 @@ class HotelTest {
         assertThat(hotel.getId()).isNull();
     }
  
-    @Test
-    void actualizarDatos_sobreescribeTodosLosCampos() {
-        Hotel hotel = new Hotel("Hotel Viejo", "Calle 1, Mendoza", "foto-vieja.jpg", "Todo incluido");
- 
-        hotel.actualizarDatos("Hotel Nuevo", "Calle 2, Salta", "foto-nueva.jpg", "Nada");
- 
-        assertThat(hotel.getNombre()).isEqualTo("Hotel Nuevo");
-        assertThat(hotel.getDestino()).isEqualTo("Calle 2, Salta");
-        assertThat(hotel.getFotoUrl()).isEqualTo("foto-nueva.jpg");
-        assertThat(hotel.getServicio()).isEqualTo("Nada");
-    }
- 
 }

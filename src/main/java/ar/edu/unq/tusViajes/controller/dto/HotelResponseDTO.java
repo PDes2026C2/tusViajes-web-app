@@ -1,14 +1,3 @@
 package ar.edu.unq.tusViajes.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class HotelResponseDTO {
-    private Long id;
-    private String nombre;
-    private String destino;
-    private String fotoUrl;
-    private String servicio;
-}
+public record HotelResponseDTO(Long id, String nombre, String destino, String fotoUrl, String servicio) {}

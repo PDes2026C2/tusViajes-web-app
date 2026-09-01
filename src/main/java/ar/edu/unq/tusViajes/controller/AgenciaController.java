@@ -42,7 +42,7 @@ public class AgenciaController {
     @PostMapping
     public ResponseEntity<AgenciaResponseDTO> crear(@Valid @RequestBody AgenciaRequestDTO dto) {
         AgenciaResponseDTO creada = agenciaService.crear(dto);
-        return ResponseEntity.created(URI.create("/api/agencias/" + creada.getId())).body(creada);
+        return ResponseEntity.created(URI.create("/api/agencias/" + creada.id())).body(creada);
     }
  
     @PutMapping("/{id}")
