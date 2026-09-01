@@ -60,7 +60,7 @@ public class AgenciaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Agencia " + id + " no encontrada"));
     }
  
-    private AgenciaResponseDTO toResponseDTO(Agencia agencia) {
+    public AgenciaResponseDTO toResponseDTO(Agencia agencia) {
         return new AgenciaResponseDTO(agencia.getId(), agencia.getRazonSocial(), agencia.getCuit());
     }
 }
