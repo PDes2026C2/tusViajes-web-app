@@ -38,10 +38,4 @@ public class PaqueteRequestDTO {
 
     @NotNull
     private Long agenciaId;
-
-    @NotNull
-    private Long vueloIdaId;
-
-    @NotNull
-    private Long vueloVueltaId;
 }

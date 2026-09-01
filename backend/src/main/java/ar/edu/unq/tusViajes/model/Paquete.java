@@ -39,17 +39,8 @@ public class Paquete {
     @JoinColumn(name = "agencia_id", nullable = false)
     private Agencia agencia;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vuelo_ida_id")
-    private Vuelo vueloIda;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vuelo_vuelta_id")
-    private Vuelo vueloVuelta;
-
     public Paquete(String nombre, String descripcion, Double precio, LocalDateTime fechaInicio,
-                   LocalDateTime fechaFin, Hotel hotel, Agencia agencia, Vuelo vueloIda,
-                   Vuelo vueloVuelta) {
+                   LocalDateTime fechaFin, Hotel hotel, Agencia agencia) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -57,13 +48,10 @@ public class Paquete {
         this.fechaFin = fechaFin;
         this.hotel = hotel;
         this.agencia = agencia;
-        this.vueloIda = vueloIda;
-        this.vueloVuelta = vueloVuelta;
     }
 
     public void actualizarDatos(String nombre, String descripcion, Double precio, LocalDateTime fechaInicio,
-                   LocalDateTime fechaFin, Hotel hotel, Agencia agencia, Vuelo vueloIda,
-                   Vuelo vueloVuelta) {
+                   LocalDateTime fechaFin, Hotel hotel, Agencia agencia) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -71,7 +59,5 @@ public class Paquete {
         this.fechaFin = fechaFin;
         this.hotel = hotel;
         this.agencia = agencia;
-        this.vueloIda = vueloIda;
-        this.vueloVuelta = vueloVuelta;
     }
 }
