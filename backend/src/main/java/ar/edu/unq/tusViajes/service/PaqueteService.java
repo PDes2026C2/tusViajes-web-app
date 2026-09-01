@@ -94,6 +94,6 @@ public class PaqueteService {
     private PaqueteResponseDTO toResponseDTO(Paquete paquete) {
         return new PaqueteResponseDTO(paquete.getId(), paquete.getNombre(), paquete.getDescripcion(),
                 paquete.getPrecio(), paquete.getFechaInicio(), paquete.getFechaFin(), hotelService.toResponseDTO(paquete.getHotel()),
-                paquete.getAgencia().getId(), paquete.getVueloIda().getId(), paquete.getVueloVuelta().getId()); // TODO aca devolver DTOs de agencia y vuelo cuando este implementado
+                agenciaService.toResponseDTO(paquete.getAgencia()), paquete.getVueloIda().getId(), paquete.getVueloVuelta().getId()); // TODO aca devolver DTOs vuelo cuando este implementado
     }
 }
