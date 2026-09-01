@@ -55,7 +55,7 @@ public class AgenciaService {
         agenciaRepository.deleteById(id);
     }
  
-    private Agencia buscarEntidadPorId(Long id) {
+    public Agencia buscarEntidadPorId(Long id) {
         return agenciaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Agencia " + id + " no encontrada"));
     }

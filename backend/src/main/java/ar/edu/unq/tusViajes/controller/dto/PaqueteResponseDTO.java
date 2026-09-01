@@ -21,6 +21,4 @@ public class PaqueteResponseDTO {
     private LocalDateTime fechaFin;
     private HotelResponseDTO hotel;
     private AgenciaResponseDTO agencia;
-    private Long vueloIdaId;
-    private Long vueloVueltaId;
 }

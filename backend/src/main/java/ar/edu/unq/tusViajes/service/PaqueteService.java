@@ -3,6 +3,7 @@ package ar.edu.unq.tusViajes.service;
 import ar.edu.unq.tusViajes.controller.dto.PaqueteRequestDTO;
 import ar.edu.unq.tusViajes.controller.dto.PaqueteResponseDTO;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
+import ar.edu.unq.tusViajes.model.Agencia;
 import ar.edu.unq.tusViajes.model.Hotel;
 import ar.edu.unq.tusViajes.model.Paquete;
 import ar.edu.unq.tusViajes.repository.PaqueteRepository;
@@ -20,7 +21,6 @@ public class PaqueteService {
     private final PaqueteRepository paqueteRepository;
     private final HotelService hotelService;
     private final AgenciaService agenciaService;
-    private final VueloService vueloService;
 
     @Transactional(readOnly = true)
     public List<PaqueteResponseDTO> listar() {
@@ -41,12 +41,8 @@ public class PaqueteService {
 
         Agencia agencia = agenciaService.buscarEntidadPorId(dto.getAgenciaId());
 
-        Vuelo vueloIda = vueloService.buscarEntidadPorId(dto.getVueloIda());
-
-        Vuelo vueloVuelta = vueloService.buscarEntidadPorId(dto.getVueloVuelta());
-
         Paquete paquete = new Paquete(dto.getNombre(), dto.getDescripcion(), dto.getPrecio(), dto.getFechaInicio(),
-                dto.getFechaFin(), hotel, agencia, vueloIda, vueloVuelta);
+                dto.getFechaFin(), hotel, agencia);
         return toResponseDTO(paqueteRepository.save(paquete));
     }
 
@@ -59,10 +55,6 @@ public class PaqueteService {
 
         Agencia agencia = agenciaService.buscarEntidadPorId(dto.getAgenciaId());
 
-        Vuelo vueloIda = vueloService.buscarEntidadPorId(dto.getVueloIda());
-
-        Vuelo vueloVuelta = vueloService.buscarEntidadPorId(dto.getVueloVuelta());
-
         paquete.actualizarDatos(
                 dto.getNombre(),
                 dto.getDescripcion(),
@@ -70,9 +62,7 @@ public class PaqueteService {
                 dto.getFechaInicio(),
                 dto.getFechaFin(),
                 hotel,
-                agencia,
-                vueloIda,
-                vueloVuelta
+                agencia
         );
 
         return toResponseDTO(paqueteRepository.save(paquete));
@@ -94,6 +84,6 @@ public class PaqueteService {
     private PaqueteResponseDTO toResponseDTO(Paquete paquete) {
         return new PaqueteResponseDTO(paquete.getId(), paquete.getNombre(), paquete.getDescripcion(),
                 paquete.getPrecio(), paquete.getFechaInicio(), paquete.getFechaFin(), hotelService.toResponseDTO(paquete.getHotel()),
-                agenciaService.toResponseDTO(paquete.getAgencia()), paquete.getVueloIda().getId(), paquete.getVueloVuelta().getId()); // TODO aca devolver DTOs vuelo cuando este implementado
+                agenciaService.toResponseDTO(paquete.getAgencia()));
     }
 }
