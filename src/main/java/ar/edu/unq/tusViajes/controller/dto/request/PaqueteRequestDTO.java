@@ -1,4 +1,4 @@
-package ar.edu.unq.tusViajes.controller.dto;
+package ar.edu.unq.tusViajes.controller.dto.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

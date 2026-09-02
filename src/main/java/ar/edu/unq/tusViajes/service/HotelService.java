@@ -6,18 +6,18 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.unq.tusViajes.controller.dto.HotelRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.HotelResponseDTO;
-import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
+import ar.edu.unq.tusViajes.controller.dto.request.HotelRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.HotelResponseDTO;
 import ar.edu.unq.tusViajes.model.Hotel;
 import ar.edu.unq.tusViajes.repository.HotelRepository;
-
+import ar.edu.unq.tusViajes.validator.EntityValidator;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor 
 public class HotelService {
 
+    private final EntityValidator entityValidator;
     private final HotelRepository hotelRepository;
 
     @Transactional(readOnly = true)
@@ -34,28 +34,12 @@ public class HotelService {
 
     @Transactional
     public HotelResponseDTO crear(HotelRequestDTO dto) {
-        Hotel hotel = new Hotel(dto.getNombre(), dto.getDestino(), dto.getFotoUrl(), dto.getServicio());
+        Hotel hotel = new Hotel(dto.nombre(), dto.destino(), dto.fotoUrl(), dto.servicio());
         return toResponseDTO(hotelRepository.save(hotel));
     }
 
-    @Transactional
-    public HotelResponseDTO actualizar(Long id, HotelRequestDTO dto) {
-        Hotel hotel = buscarEntidadPorId(id);
-        hotel.actualizarDatos(dto.getNombre(), dto.getDestino(), dto.getFotoUrl(), dto.getServicio());
-        return toResponseDTO(hotel);
-    }
-
-    @Transactional
-    public void eliminar(Long id) {
-        if (!hotelRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Hotel " + id + " no encontrado");
-        }
-        hotelRepository.deleteById(id);
-    }
-
     public Hotel buscarEntidadPorId(Long id) {
-        return hotelRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel " + id + " no encontrado"));
+        return entityValidator.findByIdOrThrow(hotelRepository,id,"Hotel");
     }
 
     public HotelResponseDTO toResponseDTO(Hotel hotel) {

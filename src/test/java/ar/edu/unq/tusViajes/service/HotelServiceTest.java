@@ -1,68 +1,79 @@
 package ar.edu.unq.tusViajes.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import ar.edu.unq.tusViajes.controller.dto.HotelRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.HotelResponseDTO;
+import ar.edu.unq.tusViajes.builder.HotelBuilder;
+import ar.edu.unq.tusViajes.controller.dto.request.HotelRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.HotelResponseDTO;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.Hotel;
 import ar.edu.unq.tusViajes.repository.HotelRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@ExtendWith(MockitoExtension.class)
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+@Testcontainers
+@SpringBootTest
+@Transactional
 class HotelServiceTest {
 
-    @Mock
-    private HotelRepository hotelRepository;
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
+    @Autowired
     private HotelService hotelService;
 
-    @BeforeEach
-    void setUp() {
-        hotelService = new HotelService(hotelRepository);
+    @Autowired
+    private HotelRepository hotelRepository;
+
+    @Test
+    void listar_retornaTodosLosHotelesDeLaBaseDeDatos() {
+        Hotel guardado = hotelRepository.save(HotelBuilder.aHotel().build());
+
+        List<HotelResponseDTO> resultado = hotelService.listar();
+
+        assertThat(resultado).isNotEmpty();
+        assertThat(resultado.get(0).nombre()).isEqualTo(guardado.getNombre());
     }
 
     @Test
-    void buscarPorIdDevuelveElHotelCuandoExiste() {
-        Hotel hotel = new Hotel("Hotel Central", "Bariloche", "http://ejemplo.com/foto.jpg", "Desayuno");
-        when(hotelRepository.findById(1L)).thenReturn(Optional.of(hotel));
+    void buscarPorId_devuelveElHotelCuandoExisteEnPostgres() {
+        Hotel guardado = hotelRepository.save(
+                HotelBuilder.aHotel().withNombre("Hotel Central").withDestino("Bariloche").build()
+        );
 
-        HotelResponseDTO resultado = hotelService.buscarPorId(1L);
+        HotelResponseDTO resultado = hotelService.buscarPorId(guardado.getId());
 
-        assertThat(resultado.getNombre()).isEqualTo("Hotel Central");
-        assertThat(resultado.getDestino()).isEqualTo("Bariloche");
+        assertThat(resultado.nombre()).isEqualTo("Hotel Central");
+        assertThat(resultado.destino()).isEqualTo("Bariloche");
     }
 
     @Test
-    void buscarPorIdLanzaExcepcionCuandoNoExiste() {
-        when(hotelRepository.findById(99L)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> hotelService.buscarPorId(99L))
+    void buscarPorId_lanzaExcepcionCuandoNoExisteEnPostgres() {
+        assertThatThrownBy(() -> hotelService.buscarPorId(99999L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
-    void crearGuardaYDevuelveElHotelCreado() {
-        HotelRequestDTO dto = new HotelRequestDTO();
-        dto.setNombre("Hotel Nuevo");
-        dto.setDestino("Mendoza");
-
-        when(hotelRepository.save(any(Hotel.class)))
-                .thenAnswer(invocacion -> invocacion.getArgument(0));
+    void crear_guardaYDevuelveElHotelCreado() {
+        HotelRequestDTO dto = new HotelRequestDTO("Hotel Nuevo", "Mendoza", null, null);
 
         HotelResponseDTO resultado = hotelService.crear(dto);
 
-        assertThat(resultado.getNombre()).isEqualTo("Hotel Nuevo");
-        assertThat(resultado.getDestino()).isEqualTo("Mendoza");
+        assertThat(resultado.id()).isNotNull();
+        assertThat(resultado.nombre()).isEqualTo("Hotel Nuevo");
+        assertThat(resultado.destino()).isEqualTo("Mendoza");
+
+        // Verificamos que realmente se haya persistido en el repositorio real
+        assertThat(hotelRepository.existsById(resultado.id())).isTrue();
     }
 }

@@ -1,7 +1,7 @@
 package ar.edu.unq.tusViajes.controller;
 
-import ar.edu.unq.tusViajes.controller.dto.PaqueteRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PaqueteResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.PaqueteRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PaqueteResponseDTO;
 import ar.edu.unq.tusViajes.service.PaqueteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package ar.edu.unq.tusViajes.controller.dto;
+package ar.edu.unq.tusViajes.controller.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
