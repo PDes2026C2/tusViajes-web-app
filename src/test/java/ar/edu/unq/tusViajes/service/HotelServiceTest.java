@@ -1,8 +1,8 @@
 package ar.edu.unq.tusViajes.service;
 
 import ar.edu.unq.tusViajes.builder.HotelBuilder;
-import ar.edu.unq.tusViajes.controller.dto.HotelRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.HotelResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.HotelRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.HotelResponseDTO;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.Hotel;
 import ar.edu.unq.tusViajes.repository.HotelRepository;

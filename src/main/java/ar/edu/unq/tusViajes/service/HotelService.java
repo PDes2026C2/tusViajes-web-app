@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.unq.tusViajes.controller.dto.HotelRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.HotelResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.HotelRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.HotelResponseDTO;
 import ar.edu.unq.tusViajes.model.Hotel;
 import ar.edu.unq.tusViajes.repository.HotelRepository;
 import ar.edu.unq.tusViajes.validator.EntityValidator;

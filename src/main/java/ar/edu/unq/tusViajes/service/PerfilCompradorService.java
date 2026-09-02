@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
- 
-import ar.edu.unq.tusViajes.controller.dto.PerfilCompradorRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PerfilCompradorResponseDTO;
+
+import ar.edu.unq.tusViajes.controller.dto.request.PerfilCompradorRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PerfilCompradorResponseDTO;
 import ar.edu.unq.tusViajes.model.PerfilComprador;
 import ar.edu.unq.tusViajes.repository.PerfilCompradorRepository;
 import ar.edu.unq.tusViajes.validator.EntityValidator;

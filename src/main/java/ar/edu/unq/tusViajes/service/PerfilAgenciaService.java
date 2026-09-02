@@ -7,8 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.unq.tusViajes.controller.dto.PerfilAgenciaRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PerfilAgenciaResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.PerfilAgenciaRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PerfilAgenciaResponseDTO;
 import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
 import ar.edu.unq.tusViajes.model.Agencia;
 import ar.edu.unq.tusViajes.model.PerfilAgencia;

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.unq.tusViajes.controller.dto.HotelRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.HotelResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.HotelRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.HotelResponseDTO;
 import ar.edu.unq.tusViajes.service.HotelService;
 
 import jakarta.validation.Valid;

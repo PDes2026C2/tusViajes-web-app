@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
- 
-import ar.edu.unq.tusViajes.controller.dto.PerfilAgenciaRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PerfilAgenciaResponseDTO;
+
+import ar.edu.unq.tusViajes.controller.dto.request.PerfilAgenciaRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PerfilAgenciaResponseDTO;
 import ar.edu.unq.tusViajes.service.PerfilAgenciaService;
  
 import jakarta.validation.Valid;

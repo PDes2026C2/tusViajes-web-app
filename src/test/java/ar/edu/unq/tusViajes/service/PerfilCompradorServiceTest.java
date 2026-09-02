@@ -1,8 +1,8 @@
 package ar.edu.unq.tusViajes.service;
 
 import ar.edu.unq.tusViajes.builder.PerfilCompradorBuilder;
-import ar.edu.unq.tusViajes.controller.dto.PerfilCompradorRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PerfilCompradorResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.PerfilCompradorRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PerfilCompradorResponseDTO;
 import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.PerfilComprador;

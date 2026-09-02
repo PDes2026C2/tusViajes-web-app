@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.unq.tusViajes.controller.dto.AgenciaRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.AgenciaResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.AgenciaRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.AgenciaResponseDTO;
 import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.Agencia;

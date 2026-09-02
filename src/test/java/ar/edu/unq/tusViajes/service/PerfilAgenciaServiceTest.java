@@ -2,8 +2,8 @@ package ar.edu.unq.tusViajes.service;
 
 import ar.edu.unq.tusViajes.builder.AgenciaBuilder;
 import ar.edu.unq.tusViajes.builder.PerfilAgenciaBuilder;
-import ar.edu.unq.tusViajes.controller.dto.PerfilAgenciaRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PerfilAgenciaResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.PerfilAgenciaRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PerfilAgenciaResponseDTO;
 import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
 import ar.edu.unq.tusViajes.model.Agencia;
 import ar.edu.unq.tusViajes.model.PerfilAgencia;
