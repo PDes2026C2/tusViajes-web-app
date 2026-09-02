@@ -78,7 +78,7 @@ class PerfilCompradorServiceTest {
         assertThat(resultado.dni()).isEqualTo("37111222");
 
         PerfilComprador guardadoEnDb = perfilCompradorRepository.findById(resultado.id()).orElseThrow();
-        assertThat(guardadoEnDb.getPassword()).isNotEqualTo("secret123");
+        assertThat(guardadoEnDb.getPasswordHash()).isNotEqualTo("secret123");
     }
 
     @Test

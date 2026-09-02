@@ -20,13 +20,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @SpringBootTest
 @Transactional 
 public class AgenciaServiceTest {
 
-    
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
@@ -46,7 +46,7 @@ public class AgenciaServiceTest {
         List<AgenciaResponseDTO> resultado = agenciaService.listar();
 
         assertThat(resultado).isNotEmpty();
-        assertThat(resultado.get(0).razonSocial()).isEqualTo(guardada.getRazonSocial());
+        assertEquals(resultado.get(0).razonSocial(),guardada.getRazonSocial());
     }
 
     @Test

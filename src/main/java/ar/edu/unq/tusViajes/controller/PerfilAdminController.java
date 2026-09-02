@@ -17,11 +17,9 @@ import ar.edu.unq.tusViajes.service.PerfilAdminService;
  
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
- 
-// Mismo caso que PerfilAgenciaController -- va a requerir rol ADMIN cuando
-// exista login. Este es doblemente sensible: crea a OTROS admines.
+
 @RestController
-@RequestMapping("/api/admin/perfiles-admin")
+@RequestMapping("/api/admin/perfiles-admin")   //admin ya que este los gestiona
 @RequiredArgsConstructor
 public class PerfilAdminController {
  

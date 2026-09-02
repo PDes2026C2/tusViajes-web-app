@@ -18,12 +18,8 @@ import ar.edu.unq.tusViajes.service.PerfilAgenciaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
  
-// El prefijo /api/admin/... es a proposito, para dejar claro que es un
-// endpoint de gestion, no publico. TODO cuando exista login: proteger con
-// @PreAuthorize("hasRole('ADMIN')") o el filtro JWT correspondiente -- por
-// ahora queda abierto, igual que el resto de la API.
 @RestController
-@RequestMapping("/api/admin/perfiles-agencia")
+@RequestMapping("/api/admin/perfiles-agencia") //admin ya que este los gestiona
 @RequiredArgsConstructor
 public class PerfilAgenciaController {
  

@@ -1,14 +1,11 @@
 package ar.edu.unq.tusViajes.controller;
 
-import ar.edu.unq.tusViajes.builder.AgenciaBuilder;
-import ar.edu.unq.tusViajes.builder.PerfilAgenciaBuilder;
-import ar.edu.unq.tusViajes.model.Agencia;
-import ar.edu.unq.tusViajes.model.PerfilAgencia;
-import ar.edu.unq.tusViajes.repository.AgenciaRepository;
-import ar.edu.unq.tusViajes.repository.PerfilAgenciaRepository;
+import ar.edu.unq.tusViajes.builder.PerfilCompradorBuilder;
+import ar.edu.unq.tusViajes.model.PerfilComprador;
+import ar.edu.unq.tusViajes.repository.PerfilCompradorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
@@ -28,86 +25,72 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional 
-class PerfilAgenciaControllerTest {
+class PerfilCompradorControllerTest {
 
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private PerfilAgenciaRepository perfilAgenciaRepository;
-
-    @Autowired
-    private AgenciaRepository agenciaRepository;
+    private PerfilCompradorRepository perfilCompradorRepository;
 
     @Test
-    void listar_retorna200YListaDePerfiles() throws Exception {
-        Agencia agencia = agenciaRepository.save(
-                AgenciaBuilder.anAgencia().withRazonSocial("Agencia SA").build()
-        );
-
-        perfilAgenciaRepository.save(
-                PerfilAgenciaBuilder.aPerfilAgencia()
-                        .withAgencia(agencia)
-                        .withNombre("Carlos")
-                        .withEmail("carlos@agencia.com")
+    void listar_retorna200YListaDeCompradores() throws Exception {
+        perfilCompradorRepository.save(
+                PerfilCompradorBuilder.aPerfilComprador()
+                        .withNombre("Lucas")
+                        .withEmail("lucas@example.com")
                         .build()
         );
 
-        mockMvc.perform(get("/api/admin/perfiles-agencia"))
+        mockMvc.perform(get("/api/compradores"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").isNotEmpty())
-                .andExpect(jsonPath("$[0].agenciaRazonSocial").value("Agencia SA"));
+                .andExpect(jsonPath("$[0].nombre").value("Lucas"));
     }
 
     @Test
     void buscarPorId_retorna200CuandoExiste() throws Exception {
-        Agencia agencia = agenciaRepository.save(
-                AgenciaBuilder.anAgencia().withRazonSocial("Agencia SA").build()
-        );
-
-        PerfilAgencia guardado = perfilAgenciaRepository.save(
-                PerfilAgenciaBuilder.aPerfilAgencia()
-                        .withAgencia(agencia)
-                        .withEmail("carlos@agencia.com")
+        PerfilComprador guardado = perfilCompradorRepository.save(
+                PerfilCompradorBuilder.aPerfilComprador()
+                        .withDni("38123456")
                         .build()
         );
 
-        mockMvc.perform(get("/api/admin/perfiles-agencia/" + guardado.getId()))
+        mockMvc.perform(get("/api/compradores/" + guardado.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(guardado.getId()))
-                .andExpect(jsonPath("$.email").value("carlos@agencia.com"));
+                .andExpect(jsonPath("$.dni").value("38123456"));
     }
 
     @Test
     void buscarPorId_retorna404CuandoNoExiste() throws Exception {
-        mockMvc.perform(get("/api/admin/perfiles-agencia/99999"))
+        mockMvc.perform(get("/api/compradores/99999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void crear_retorna201YLocationHeader() throws Exception {
-        Agencia agencia = agenciaRepository.save(AgenciaBuilder.anAgencia().build());
-
+    void registrar_retorna201YLocationHeader() throws Exception {
         String json = """
                 {
-                    "nombre": "Carlos",
-                    "apellido": "Perez",
-                    "email": "carlos@agencia.com",
+                    "nombre": "Lucas",
+                    "apellido": "Gomez",
+                    "email": "lucas@example.com",
                     "password": "secretPassword123",
-                    "agenciaId": %d
+                    "telefono": "11223344",
+                    "dni": "38123456"
                 }
-                """.formatted(agencia.getId());
+                """;
 
-        mockMvc.perform(post("/api/admin/perfiles-agencia")
+        mockMvc.perform(post("/api/compradores")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.email").value("carlos@agencia.com"));
+                .andExpect(jsonPath("$.dni").value("38123456"));
     }
 }

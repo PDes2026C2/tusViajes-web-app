@@ -1,10 +1,9 @@
 package ar.edu.unq.tusViajes.service;
 
 import ar.edu.unq.tusViajes.builder.PerfilAdminBuilder;
-import ar.edu.unq.tusViajes.controller.dto.PerfilAdminRequestDTO;
-import ar.edu.unq.tusViajes.controller.dto.PerfilAdminResponseDTO;
+import ar.edu.unq.tusViajes.controller.dto.request.PerfilAdminRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PerfilAdminResponseDTO;
 import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
-import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
 import ar.edu.unq.tusViajes.model.PerfilAdmin;
 import ar.edu.unq.tusViajes.repository.PerfilAdminRepository;
 import org.junit.jupiter.api.Test;
@@ -68,7 +67,7 @@ class PerfilAdminServiceTest {
         assertThat(resultado.email()).isEqualTo("super@admin.com");
 
         PerfilAdmin guardadoEnDb = perfilAdminRepository.findById(resultado.id()).orElseThrow();
-        assertThat(guardadoEnDb.getPassword()).isNotEqualTo("root123");
+        assertThat(guardadoEnDb.getPasswordHash()).isNotEqualTo("root123");
     }
 
     @Test
