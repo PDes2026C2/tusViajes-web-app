@@ -1,6 +1,5 @@
-package ar.edu.unq.tusViajes.model.Usuario;
+package ar.edu.unq.tusViajes.model;
 
-import ar.edu.unq.tusViajes.model.Agencia;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -21,8 +20,8 @@ public class PerfilAgencia extends Usuario {
     @JoinColumn(name = "agencia_id", nullable = false, unique = true)
     private Agencia agencia;
  
-    public PerfilAgencia(String nombre, String apellido,String dni, String email, String passwordHash, Agencia agencia) {
-        super(nombre, apellido, dni, email, passwordHash);
+    public PerfilAgencia(String nombre, String apellido, String email, String passwordHash, Agencia agencia) {
+        super(nombre, apellido, email, passwordHash);
         this.agencia = agencia;
     }
  

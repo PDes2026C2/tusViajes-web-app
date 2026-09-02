@@ -42,6 +42,6 @@ public class PerfilAgenciaController {
     @PostMapping
     public ResponseEntity<PerfilAgenciaResponseDTO> crear(@Valid @RequestBody PerfilAgenciaRequestDTO dto) {
         PerfilAgenciaResponseDTO creado = perfilAgenciaService.crear(dto);
-        return ResponseEntity.created(URI.create("/api/admin/perfiles-agencia/" + creado.getId())).body(creado);
+        return ResponseEntity.created(URI.create("/api/admin/perfiles-agencia/" + creado.id())).body(creado);
     }
 }
