@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unq.tusViajes.controller.dto.request.PerfilCompradorRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PaqueteResponseDTO;
 import ar.edu.unq.tusViajes.controller.dto.response.PerfilCompradorResponseDTO;
+import ar.edu.unq.tusViajes.model.Paquete;
 import ar.edu.unq.tusViajes.model.PerfilComprador;
+import ar.edu.unq.tusViajes.repository.PaqueteRepository;
 import ar.edu.unq.tusViajes.repository.PerfilCompradorRepository;
 import ar.edu.unq.tusViajes.validator.EntityValidator;
 import ar.edu.unq.tusViajes.validator.UsuarioValidator;
@@ -23,6 +26,8 @@ public class PerfilCompradorService {
     private final UsuarioValidator usuarioValidator;
     private final PerfilCompradorRepository perfilCompradorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PaqueteRepository paqueteRepository;
+    private final PaqueteService paqueteService;
  
     @Transactional(readOnly = true)
     public List<PerfilCompradorResponseDTO> listar() {
@@ -45,12 +50,42 @@ public class PerfilCompradorService {
         return toResponseDTO(perfilCompradorRepository.save(perfil));
     }
  
+    @Transactional
+    public void agregarFavorito(Long compradorId, Long paqueteId) {
+        PerfilComprador comprador = buscarEntidadPorId(compradorId);
+        Paquete paquete = buscarPaquete(paqueteId);
+
+        comprador.agregarFavorito(paquete);
+    }
+
+    @Transactional
+    public void quitarFavorito(Long compradorId, Long paqueteId) {
+        PerfilComprador comprador = buscarEntidadPorId(compradorId);
+        Paquete paquete = buscarPaquete(paqueteId);
+
+        comprador.quitarFavorito(paquete);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PaqueteResponseDTO> listarFavoritos(Long compradorId) {
+        PerfilComprador comprador = buscarEntidadPorId(compradorId);
+
+        
+        return comprador.getPaquetesFavoritos().stream()
+                .map(paquete -> paqueteService.buscarPorId(paquete.getId())) 
+                .collect(Collectors.toList());
+    }
+
     private PerfilComprador buscarEntidadPorId(Long id) {
         return entityValidator.findByIdOrThrow(perfilCompradorRepository,id,"Comprador");
     }
  
-    private PerfilCompradorResponseDTO toResponseDTO(PerfilComprador perfil) {
-        return new PerfilCompradorResponseDTO(perfil.getId(), perfil.getNombre(), perfil.getApellido(),
-                perfil.getEmail(), perfil.getTelefono(), perfil.getDni());
+    private PerfilCompradorResponseDTO toResponseDTO(PerfilComprador comprador) {
+        return new PerfilCompradorResponseDTO(comprador.getId(), comprador.getNombre(), comprador.getApellido(),
+                comprador.getEmail(), comprador.getTelefono(), comprador.getDni());
+    }
+
+    private Paquete buscarPaquete(Long id) {
+        return entityValidator.findByIdOrThrow(paqueteRepository, id, "Paquete");
     }
 }

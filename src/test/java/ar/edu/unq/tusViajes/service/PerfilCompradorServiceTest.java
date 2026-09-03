@@ -1,11 +1,21 @@
 package ar.edu.unq.tusViajes.service;
 
+import ar.edu.unq.tusViajes.builder.AgenciaBuilder;
+import ar.edu.unq.tusViajes.builder.HotelBuilder;
+import ar.edu.unq.tusViajes.builder.PaqueteBuilder;
 import ar.edu.unq.tusViajes.builder.PerfilCompradorBuilder;
 import ar.edu.unq.tusViajes.controller.dto.request.PerfilCompradorRequestDTO;
+import ar.edu.unq.tusViajes.controller.dto.response.PaqueteResponseDTO;
 import ar.edu.unq.tusViajes.controller.dto.response.PerfilCompradorResponseDTO;
 import ar.edu.unq.tusViajes.exception.DuplicateResourceException;
 import ar.edu.unq.tusViajes.exception.ResourceNotFoundException;
+import ar.edu.unq.tusViajes.model.Agencia;
+import ar.edu.unq.tusViajes.model.Hotel;
+import ar.edu.unq.tusViajes.model.Paquete;
 import ar.edu.unq.tusViajes.model.PerfilComprador;
+import ar.edu.unq.tusViajes.repository.AgenciaRepository;
+import ar.edu.unq.tusViajes.repository.HotelRepository;
+import ar.edu.unq.tusViajes.repository.PaqueteRepository;
 import ar.edu.unq.tusViajes.repository.PerfilCompradorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +38,22 @@ class PerfilCompradorServiceTest {
 
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
     @Autowired
     private PerfilCompradorService perfilCompradorService;
 
     @Autowired
     private PerfilCompradorRepository perfilCompradorRepository;
+
+    @Autowired
+    private PaqueteRepository paqueteRepository;
+
+    @Autowired
+    private HotelRepository hotelRepository;
+
+    @Autowired
+    private AgenciaRepository agenciaRepository;
 
     @Test
     void listar_retornaTodosLosCompradores() {
@@ -95,5 +114,63 @@ class PerfilCompradorServiceTest {
         assertThatThrownBy(() -> perfilCompradorService.registrar(dto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("repetido@example.com");
+    }
+
+    @Test
+    void agregarFavorito_asociaElPaqueteAlComprador() {
+       
+        PerfilComprador comprador = PerfilCompradorBuilder.aPerfilComprador().build();
+        comprador = perfilCompradorRepository.save(comprador);
+
+        Hotel hotel = hotelRepository.save(HotelBuilder.aHotel().build());
+        Agencia agencia = agenciaRepository.save(AgenciaBuilder.anAgencia().build());
+        Paquete paquete = paqueteRepository.save(PaqueteBuilder.aPaquete().withHotel(hotel).withAgencia(agencia).build());
+
+        perfilCompradorService.agregarFavorito(comprador.getId(), paquete.getId());
+
+        PerfilComprador compradorActualizado = perfilCompradorRepository.findById(comprador.getId()).orElseThrow();
+        assertThat(compradorActualizado.getPaquetesFavoritos()).hasSize(1);
+        assertThat(compradorActualizado.getPaquetesFavoritos().iterator().next().getId()).isEqualTo(paquete.getId());
+    }
+
+    @Test
+    void quitarFavorito_desasociaElPaqueteDelComprador() {
+     
+        PerfilComprador comprador = PerfilCompradorBuilder.aPerfilComprador().build();
+        Hotel hotel = hotelRepository.save(HotelBuilder.aHotel().build());
+        Agencia agencia = agenciaRepository.save(AgenciaBuilder.anAgencia().build());
+        Paquete paquete = paqueteRepository.save(PaqueteBuilder.aPaquete().withHotel(hotel).withAgencia(agencia).build());
+        
+        comprador.agregarFavorito(paquete);
+        comprador = perfilCompradorRepository.save(comprador);
+
+        perfilCompradorService.quitarFavorito(comprador.getId(), paquete.getId());
+
+        PerfilComprador compradorActualizado = perfilCompradorRepository.findById(comprador.getId()).orElseThrow();
+        assertThat(compradorActualizado.getPaquetesFavoritos()).isEmpty();
+    }
+
+    @Test
+    void listarFavoritos_devuelveListaDePaquetesResponseDTO() {
+       
+        PerfilComprador comprador = PerfilCompradorBuilder.aPerfilComprador().build();
+        Hotel hotel = hotelRepository.save(HotelBuilder.aHotel().build());
+        Agencia agencia = agenciaRepository.save(AgenciaBuilder.anAgencia().build());
+        Paquete paquete = paqueteRepository.save(PaqueteBuilder.aPaquete().withNombre("Promo Bariloche").withHotel(hotel).withAgencia(agencia).build());
+        
+        comprador.agregarFavorito(paquete);
+        perfilCompradorRepository.save(comprador);
+
+        List<PaqueteResponseDTO> favoritos = perfilCompradorService.listarFavoritos(comprador.getId());
+
+        assertThat(favoritos).hasSize(1);
+        assertThat(favoritos.get(0).getNombre()).isEqualTo("Promo Bariloche");
+    }
+
+    @Test
+    void agregarFavorito_lanzaExcepcionSiCompradorNoExiste() {
+        assertThatThrownBy(() -> perfilCompradorService.agregarFavorito(999L, 1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Comprador");
     }
 }
